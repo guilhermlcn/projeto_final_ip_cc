@@ -7,9 +7,9 @@ app = Flask(__name__)
 def ola():
     return render_template('index.html')
 
-@app.route('/sobre_equipe')
+@app.route('/sobre-equipe')
 def alo():
-    return render_template('sobre_equipe.html')
+    return render_template('sobre-equipe.html')
 
 app.run()
 
