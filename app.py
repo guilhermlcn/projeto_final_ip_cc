@@ -11,9 +11,9 @@ app = Flask(__name__)
 def ola():
     return render_template('index.html')
 
-@app.route('/sobre-equipe')
+@app.route('/sobre_equipe')
 def alo():
-    return render_template('sobre-equipe.html')
+    return render_template('sobre_equipe.html')
 
 @app.route('/glossario')
 def glossario():
