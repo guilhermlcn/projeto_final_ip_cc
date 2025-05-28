@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, session
 import csv
 import os
 from google import genai
@@ -21,7 +21,7 @@ def glossario():
 
     glossario_de_termos = []
 
-    with open ('bd_glossario.csv', newline='', encoding='utf-8') as csvfile:
+    with open ('bd_glossario.csv', 'r', newline='', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile, delimiter=';')
         for t in reader:
             glossario_de_termos.append(t)
@@ -36,7 +36,7 @@ def novo_termo():
 @app.route('/criar_termo', methods=['POST'])
 def criar_termo():
   termo = request.form['termo']
-  definicao = request.form['definição']
+  definicao = request.form['definicao']
 
   with open('bd_glossario.csv', 'a', newline='', encoding='utf-8') as csvfile:
     writer = csv.writer(csvfile, delimiter=';')
@@ -44,11 +44,16 @@ def criar_termo():
 
   return redirect(url_for('glossario'))
 
-@app.route('/chat_bot', methods=['POST'])
-def chat_bot():
-    prompt = request.form.get('prompt')
+@app.route('/chat_bot')
+def chat_form():
+    resposta_bot = session.pop('resposta_bot', None)
+    return render_template('chat_bot.html', resposta=resposta_bot, historico=historico_chat)
+
+@app.route('/chat_bot_form', methods=['GET', 'POST'])
+def chat_bot_form():
+    prompt = request.form['prompt']
     resposta = None
-    client = genai.Client(api_key='')
+    client = genai.Client(api_key='AIzaSyDAmIchF4JvyEfv4njinAlXTR886zJvz-w')
     modelo = 'gemini-2.0-flash'
     chat_config = {
         "system_instruction": "Você é um assistente pessoal, e sempre responde de forma objetiva."
@@ -58,7 +63,7 @@ def chat_bot():
 
     resposta = chat.send_message(prompt)
 
-    return render_template('chat_bot.html', resposta=resposta)
+    return redirect(url_for('chat_form'))
 
-app.run()
+app.run(debug=True)
 
