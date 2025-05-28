@@ -1,4 +1,4 @@
-from click import prompt
+
 from flask import Flask, render_template, request, url_for, redirect
 import csv
 import os
@@ -61,6 +61,4 @@ def chat_bot():
     return render_template('chat_bot.html', resposta=resposta)
 
 app.run()
-
-
 
