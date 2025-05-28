@@ -1,0 +1,19 @@
+% extends "modelo.html" %}
+{% block conteudo %}
+<body>
+    <h1>Chat com Assistente Virtual</h1>
+
+    <form method="POST">
+        <label for="prompt">Digite sua pergunta:</label><br>
+        <textarea name="prompt" id="prompt" required></textarea><br><br>
+        <button type="submit">Enviar</button>
+    </form>
+
+    {% if resposta %}
+    <div class="resposta">
+        <strong>Resposta do assistente:</strong><br>
+        {{ resposta.text }}
+    </div>
+    {% endif %}
+</body>
+{% endblock %}
