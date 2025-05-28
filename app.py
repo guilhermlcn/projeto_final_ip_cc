@@ -48,7 +48,7 @@ def criar_termo():
 def chat_bot():
     prompt = request.form.get('prompt')
     resposta = None
-    client = genai.Client(api_key="AIzaSyDAmIchF4JvyEfv4njinAlXTR886zJvz-w")
+    client = genai.Client(api_key='')
     modelo = 'gemini-2.0-flash'
     chat_config = {
         "system_instruction": "Você é um assistente pessoal, e sempre responde de forma objetiva."
