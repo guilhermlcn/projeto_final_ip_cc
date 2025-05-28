@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, url_for
+
+from flask import Flask, render_template, request, url_for, redirect
 import csv
 import os
-
-from werkzeug.utils import redirect
+from google import genai
+from google.genai import types
 
 app = Flask(__name__)
 
@@ -28,9 +29,9 @@ def glossario():
     return render_template('glossario.html', glossario=glossario_de_termos)
 
 
-@app.route('/novo-termo')
+@app.route('/novo_termo')
 def novo_termo():
-    return render_template('novo-termo.html')
+    return render_template('novo_termo.html')
 
 @app.route('/criar_termo', methods=['POST'])
 def criar_termo():
@@ -42,4 +43,22 @@ def criar_termo():
     writer.writerow([termo, definicao])
 
   return redirect(url_for('glossario'))
+
+@app.route('/chat_bot', methods=['POST'])
+def chat_bot():
+    prompt = request.form.get('prompt')
+    resposta = None
+    client = genai.Client(api_key='')
+    modelo = 'gemini-2.0-flash'
+    chat_config = {
+        "system_instruction": "Você é um assistente pessoal, e sempre responde de forma objetiva."
+}
+
+    chat = client.chats.create(model=modelo, config=chat_config)
+
+    resposta = chat.send_message(prompt)
+
+    return render_template('chat_bot.html', resposta=resposta)
+
 app.run()
+
