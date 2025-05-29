@@ -1,12 +1,10 @@
-
 from flask import Flask, render_template, request, url_for, redirect, session
 import csv
 import os
-from google import genai
-from google.genai import types
+import requests
 
 app = Flask(__name__)
-
+app.secret_key = 'chave_secreta_do_app'  # Necessário para usar sessões
 
 @app.route('/')
 def ola():
@@ -18,7 +16,6 @@ def alo():
 
 @app.route('/glossario')
 def glossario():
-
     glossario_de_termos = []
 
     with open ('bd_glossario.csv', 'r', newline='', encoding='utf-8') as csvfile:
@@ -28,42 +25,86 @@ def glossario():
 
     return render_template('glossario.html', glossario=glossario_de_termos)
 
-
 @app.route('/novo_termo')
 def novo_termo():
     return render_template('novo_termo.html')
 
 @app.route('/criar_termo', methods=['POST'])
 def criar_termo():
-  termo = request.form['termo']
-  definicao = request.form['definicao']
+    termo = request.form['termo']
+    definicao = request.form['definicao']
 
-  with open('bd_glossario.csv', 'a', newline='', encoding='utf-8') as csvfile:
-    writer = csv.writer(csvfile, delimiter=';')
-    writer.writerow([termo, definicao])
+    with open('bd_glossario.csv', 'a', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile, delimiter=';')
+        writer.writerow([termo, definicao])
 
-  return redirect(url_for('glossario'))
+    return redirect(url_for('glossario'))
 
 @app.route('/chat_bot')
 def chat_form():
-    resposta_bot = session.pop('resposta_bot', None)
-    return render_template('chat_bot.html', resposta=resposta_bot, historico=historico_chat)
+    # Inicializa o histórico se não existir
+    if 'historico_chat' not in session:
+        session['historico_chat'] = []
+    
+    resposta_bot = session.get('resposta_bot', None)
+    historico_chat = session.get('historico_chat', [])
+    
+    return render_template('chat_bot.html', 
+                         resposta=resposta_bot, 
+                         historico_chat=historico_chat)
 
-@app.route('/chat_bot_form', methods=['GET', 'POST'])
+
+def consulta_chatbot(prompt):
+    try:
+        url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyAC4Bn0hkU6aQV0iS5GEf-gLnn49uIIfao"
+        data = {
+            "contents": [
+                {
+                    "parts": [
+                        {
+                            "text": prompt
+                        }
+                    ]
+                }
+            ]
+        }
+        headers = {"Content-Type": "application/json"}
+        
+        response = requests.post(url, json=data, headers=headers)
+        
+        if response.status_code == 200:
+            response_data = response.json()
+            return response_data['candidates'][0]['content']['parts'][0]['text']
+        else:
+            return "Desculpe, ocorreu um erro ao processar sua solicitação."
+            
+    except Exception as e:
+        return "Desculpe, ocorreu um erro inesperado."
+
+@app.route('/chat_bot_form', methods=['POST'])
 def chat_bot_form():
-    prompt = request.form['prompt']
-    resposta = None
-    client = genai.Client(api_key='AIzaSyDAmIchF4JvyEfv4njinAlXTR886zJvz-w')
-    modelo = 'gemini-2.0-flash'
-    chat_config = {
-        "system_instruction": "Você é um assistente pessoal, e sempre responde de forma objetiva."
-}
+    try:
+        prompt = request.form['prompt']
+        resposta = consulta_chatbot(prompt)
+        
+        # Atualiza o histórico do chat
+        historico_chat = session.get('historico_chat', [])
+        historico_chat.append({
+            'prompt': prompt,
+            'resposta': resposta
+        })
+        
+        # Atualiza a sessão
+        session['historico_chat'] = historico_chat
+        session['resposta_bot'] = resposta
+        
+        return redirect(url_for('chat_form'))
+        
+    except Exception as e:
+        return redirect(url_for('chat_form'))
 
-    chat = client.chats.create(model=modelo, config=chat_config)
+if __name__ == '__main__':
+    app.run(debug=True)
 
-    resposta = chat.send_message(prompt)
 
-    return redirect(url_for('chat_form'))
-
-app.run(debug=True)
 
