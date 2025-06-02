@@ -40,6 +40,28 @@ def criar_termo():
 
     return redirect(url_for('glossario'))
 
+@app.route('/deletar_termo')
+def deletar_termo():
+    return render_template('deletar_termo.html')
+
+@app.route('/delet_termo', methods=['POST'])
+def delet_termo():
+    termo = request.form['termo']
+    definicao = request.form['definicao']
+    linhas = []
+    with open('bd_glossario.csv', mode='r', newline='') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        for linha in reader:
+            if linha != [termo, definicao]:
+                linhas.append(linha)
+
+    with open('bd_glossario.csv', mode='w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=';')
+        writer.writerows(linhas)
+
+    return redirect(url_for('glossario'))
+
+
 @app.route('/chat_bot')
 def chat_form():
     # Inicializa o histórico se não existir
