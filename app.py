@@ -61,6 +61,30 @@ def delet_termo():
 
     return redirect(url_for('glossario'))
 
+@app.route('/editar_termo')
+def editar_termo():
+    return render_template('editar_termo.html')
+
+@app.route('/edit_termo', methods=['POST'])
+def edit_termo():
+    termo = request.form['termo']
+    novo_termo = request.form['novo_termo']
+    nova_definicao = request.form['nova_definicao']
+    linhas = []
+    with open('bd_glossario.csv', 'r', newline='') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';')
+        for linha in reader:
+            if linha[0] == termo:
+                linha[0] = novo_termo
+                linha[1] = nova_definicao
+            linhas.append(linha)
+
+    with open('bd_glossario.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=';')
+        writer.writerows(linhas)
+
+    return redirect('glossario')
+
 
 @app.route('/chat_bot')
 def chat_form():
