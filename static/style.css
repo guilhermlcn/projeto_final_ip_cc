@@ -1,7 +1,7 @@
 /* Variáveis CSS */
 :root {
-    --primary-color: #2c3e50;
-    --secondary-color: #3498db;
+    --primary-color: #092f55;
+    --secondary-color: #09507e;
     --accent-color: #2ecc71;
     --text-color: #333;
     --light-bg: #f5f5f5;
@@ -12,6 +12,99 @@
     --box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     --transition: all 0.3s ease;
 }
+
+/* Inicio estrutura do CSS */
+
+#estrutura_selecao {
+    font-weight: bold;
+    background-color: #699fc3;
+    color: black;
+    border-radius: 5px;
+    left: auto;
+    width: 1250px;
+}
+
+#estrutura_selecao:hover {
+    background-color: #7095b1;
+    cursor: pointer;
+}
+
+#estrutura_repeticao {
+    font-weight: bold;
+    background-color: #699fc3;
+    color: black;
+    border-radius: 5px;
+    left:auto;
+    width: 1250px;
+}
+
+#estrutura_repeticao:hover {
+    background-color: #5a8bb0;
+    cursor: pointer;
+}
+
+#vetores_matrizes {
+    font-weight: bold;
+    background-color: #699fc3;
+    color: black;
+    border-radius: 5px;
+    left: auto;
+    width: 1250px;
+}
+
+#vetores_matrizes:hover {
+    background-color: #5a8bb0;
+    cursor: pointer;
+}
+
+#funcoes_procedimentos {
+    font-weight: bold;
+    background-color: #699fc3;
+    color: black;
+    border-radius: 5px;
+    left: auto;
+    width: 1250px;
+}
+
+#funcoes_procedimentos:hover {
+    background-color: #5a8bb0;
+    cursor: pointer;
+}
+
+#tratamento_excecoes {
+    font-weight: bold;
+    background-color: #699fc3;
+    color: black;
+    border-radius: 5px;
+    left: auto;
+    width: 1250px;
+}
+
+#tratamento_excecoes:hover {
+    background-color: #5a8bb0;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Reset e Estilos Base */
 * {
@@ -37,7 +130,7 @@ body {
 
 /* Navegação */
 nav {
-    background-color: var(--primary-color);
+    background-color: white;
     padding: 15px 0;
     margin-bottom: 30px;
     box-shadow: var(--box-shadow);
@@ -51,7 +144,7 @@ nav ul {
 }
 
 nav ul li a {
-    color: var(--white);
+    color: white;
     text-decoration: none;
     padding: 8px 15px;
     border-radius: var(--border-radius);
@@ -63,10 +156,16 @@ nav ul li a:hover {
     transform: translateY(-2px);
 }
 
+
 /* Tipografia */
-h1, h2, h3 {
+h1, h3 {
     color: var(--primary-color);
     margin-bottom: 1rem;
+}
+
+h5 {
+    color: black;
+    
 }
 
 h1 {
@@ -77,6 +176,12 @@ h1 {
 }
 
 /* Chat Bot */
+
+#prompt {
+    padding: 15px;
+    background-color: black;
+}
+
 .chat-container {
     background-color: var(--white);
     border-radius: var(--border-radius);
@@ -213,36 +318,6 @@ code {
     border-left: 4px solid var(--success-color);
 }
 
-/* Equipe */
-.equipe-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    padding: 20px 0;
-}
-
-.membro-equipe {
-    background-color: var(--white);
-    padding: 25px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    text-align: center;
-    transition: var(--transition);
-}
-
-.membro-equipe:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-}
-
-.membro-equipe img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin-bottom: 15px;
-    object-fit: cover;
-    border: 3px solid var(--secondary-color);
-}
 
 /* Rodapé */
 footer {
