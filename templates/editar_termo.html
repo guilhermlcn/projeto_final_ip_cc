@@ -1,18 +1,19 @@
 {% extends "modelo.html" %}
 {% block conteudo %}
-<h1>Deletar Termo</h1>
 
-<form action="{{ url_for('delet_termo')}}" method="post">
-    <div class="mb-3">
-        <label for="termo" class="form-label">Termo a ser deletado</label>
-        <input class="form-control" id="termo" name="termo" aria-describedby="emailHelp">
-    </div>
-    <div class="mb-3">
-        <label for="definicao" class="form-label">Definição a deletada</label>
-        <textarea class="form-control" id="definicao" name="definicao" rows="3"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Enviar</button>
-</form>
+  <h1>Editar Termo</h1>
+  <form method="POST" action="/edit_termo">
+    <label>Termo existente:</label><br>
+    <input class="form-control" id="termo" name="termo" aria-describedby="emailHelp"><br><br>
+
+    <label>Novo termo:</label><br>
+    <input class="form-control" id="novo_termo" name="novo_termo" aria-describedby="emailHelp"><br><br>
+
+    <label>Nova definição:</label><br>
+    <input class="form-control" id="nova_definicao" name="nova_definicao" aria-describedby="emailHelp"><br><br>
+
+    <input type="submit" class="btn btn-primary" value="Atualizar">
+  </form>
 
 
 {% endblock %}
